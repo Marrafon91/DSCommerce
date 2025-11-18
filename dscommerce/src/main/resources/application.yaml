@@ -17,7 +17,7 @@ logging:
       %clr([%t]){cyan}
       %clr(%-50.50logger{0}){blue}
       %clr(:){yellow}
-      %m%n
+      %m
 
 ---
 
@@ -27,11 +27,8 @@ spring:
     activate:
       on-profile: test
 
-  application:
-    name: dscommerce-test
-
   datasource:
-    url: jdbc:h2:mem:dscommerce
+    url: jdbc:h2:mem:testdb
     username: sa
     password:
     driver-class-name: org.h2.Driver
@@ -42,7 +39,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show-sql: true
     properties:
       hibernate:
