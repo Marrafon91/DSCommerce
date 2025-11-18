@@ -2,6 +2,7 @@ package io.github.marrafon91.dscommerce.entities;
 
 import io.github.marrafon91.dscommerce.entities.enums.OrderStatus;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.Instant;
 import java.util.Objects;
@@ -14,12 +15,15 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
-    private Instant moment;
+    private Instant moment = Instant.now();
 
+    @NotNull
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "client_id")
     private User client;
