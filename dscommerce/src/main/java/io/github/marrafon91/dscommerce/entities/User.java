@@ -2,6 +2,7 @@ package io.github.marrafon91.dscommerce.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -18,14 +19,20 @@ public class User {
     @NotNull
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @NotBlank
     private String name;
+
     @NotBlank
+    @Email
     private String email;
+
     @NotBlank
     private String phone;
+
     @JsonFormat(pattern = "yyyy/MM/dd")
     private LocalDate birthDate;
+
     @NotBlank
     private String password;
 
