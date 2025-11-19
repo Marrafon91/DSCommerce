@@ -1,6 +1,7 @@
 package io.github.marrafon91.dscommerce.entities.enums;
 
 import io.github.marrafon91.dscommerce.entities.Category;
+import io.github.marrafon91.dscommerce.entities.OrderItem;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -36,6 +37,9 @@ public class Product {
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Set<Category> categories = new HashSet<>();
+
+    @OneToMany(mappedBy = "id.product")
+    private Set<OrderItem> items = new HashSet<>();
 
     public Product() {
     }
