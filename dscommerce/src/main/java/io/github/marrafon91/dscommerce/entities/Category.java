@@ -1,6 +1,5 @@
 package io.github.marrafon91.dscommerce.entities;
 
-import io.github.marrafon91.dscommerce.entities.enums.Product;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

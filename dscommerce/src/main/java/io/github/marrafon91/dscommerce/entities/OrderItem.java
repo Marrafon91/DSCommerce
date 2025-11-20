@@ -1,6 +1,5 @@
 package io.github.marrafon91.dscommerce.entities;
 
-import io.github.marrafon91.dscommerce.entities.enums.Product;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;

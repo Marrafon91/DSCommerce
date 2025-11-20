@@ -1,6 +1,5 @@
 package io.github.marrafon91.dscommerce.entities;
 
-import io.github.marrafon91.dscommerce.entities.enums.Product;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -9,7 +8,7 @@ import jakarta.persistence.ManyToOne;
 public class OrdemItemPK {
 
     @ManyToOne
-    @JoinColumn(name = "oder_id")
+    @JoinColumn(name = "order_id")
     private Order order;
 
     @ManyToOne
