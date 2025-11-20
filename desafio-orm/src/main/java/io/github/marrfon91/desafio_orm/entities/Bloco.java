@@ -19,6 +19,10 @@ public class Bloco {
     @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
     private Instant fim = Instant.now();
 
+    @ManyToOne
+    @JoinColumn(name = "atividade_id")
+    private Atividade atividade;
+
     public Bloco() {
     }
 
@@ -50,6 +54,14 @@ public class Bloco {
 
     public void setFim(Instant fim) {
         this.fim = fim;
+    }
+
+    public Atividade getAtividade() {
+        return atividade;
+    }
+
+    public void setAtividade(Atividade atividade) {
+        this.atividade = atividade;
     }
 
     @Override
