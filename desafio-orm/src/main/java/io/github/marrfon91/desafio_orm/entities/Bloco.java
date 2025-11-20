@@ -14,10 +14,10 @@ public class Bloco {
     private Integer id;
 
     @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
-    private Instant inicio = Instant.now();
+    private Instant inicio;
 
     @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
-    private Instant fim = Instant.now();
+    private Instant fim;
 
     @ManyToOne
     @JoinColumn(name = "atividade_id")
