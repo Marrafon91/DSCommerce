@@ -5,7 +5,6 @@ import io.github.marrafon91.dscommerce.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -36,8 +35,7 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<ProductDTO> insert(@RequestBody ProductDTO dto) {
-
-         dto = service.insert(dto);
+        dto = service.insert(dto);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -45,5 +43,11 @@ public class ProductController {
                 .buildAndExpand(dto.getId())
                 .toUri();
         return ResponseEntity.created(location).body(dto);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ProductDTO> update(@PathVariable("id") Long id, @RequestBody ProductDTO dto) {
+        dto = service.update(id, dto);
+        return ResponseEntity.ok(dto);
     }
 }
