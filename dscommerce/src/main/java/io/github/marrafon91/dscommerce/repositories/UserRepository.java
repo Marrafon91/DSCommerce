@@ -1,4 +1,4 @@
-package io.github.marrafon91.dscommerce.repository;
+package io.github.marrafon91.dscommerce.repositories;
 
 import io.github.marrafon91.dscommerce.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
