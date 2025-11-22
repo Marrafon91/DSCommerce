@@ -15,20 +15,15 @@ public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @NotNull
     private Long id;
 
-    @NotBlank
     private String name;
 
-    @NotBlank
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @NotNull
     private Double price;
 
-    @NotBlank
     private String imgUrl;
 
     @ManyToMany
