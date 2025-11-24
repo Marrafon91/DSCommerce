@@ -3,18 +3,24 @@ package io.github.marrafon91.dscommerce.dto;
 import io.github.marrafon91.dscommerce.entities.Product;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 
 public class ProductDTO {
 
     private Long id;
 
-    @NotBlank
+    @NotBlank(message = "Campo Requerido!")
+    @Size(min = 3, max = 80, message = "Nome necessita entre 3 a 80 caracteres")
     private String name;
 
-    @NotBlank
+    @NotBlank(message = "Campo Requerido!")
+    @Size(min = 10, message = "Descrição precisa ter no minimo 10 caracteres")
     private String description;
 
     @NotNull
+    @Positive(message = "O preço deve ser positivo")
+
     private Double price;
 
     @NotBlank
