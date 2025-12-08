@@ -27,20 +27,20 @@ spring:
     activate:
       on-profile: test
 
-      datasource:
-        url: jdbc:h2:mem:testN1N
-        username: sa
-        password:
-        driver-class-name: org.h2.Driver
+  datasource:
+    url: jdbc:h2:mem:testN1N
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
 
-      h2:
-        console:
-          enabled: true
+  h2:
+    console:
+      enabled: true
 
-      jpa:
-        hibernate:
-          ddl-auto: create
-        show-sql: true
-        properties:
-          hibernate:
-            format_sql: true
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
