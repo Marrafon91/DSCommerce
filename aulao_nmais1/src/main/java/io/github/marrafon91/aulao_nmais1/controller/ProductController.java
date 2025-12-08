@@ -22,12 +22,10 @@ public class ProductController {
     @GetMapping
     public ResponseEntity<PageDTO<ProductDTO>> findAll(
             @RequestParam(value = "page", defaultValue = "0") Integer page,
-            @RequestParam(value = "size", defaultValue = "10") Integer size
+            @RequestParam(value = "size", defaultValue = "05") Integer size
     ) {
-
         PageRequest pageRequest = PageRequest.of(page,size);
-        Page<ProductDTO> list = service.find(pageRequest);
-        PageDTO<ProductDTO> dto = new PageDTO<>(list);
+        PageDTO<ProductDTO> dto = service.find(pageRequest);
 
         return ResponseEntity.ok(dto);
     }
