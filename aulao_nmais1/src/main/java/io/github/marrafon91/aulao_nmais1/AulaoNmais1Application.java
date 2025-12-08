@@ -48,8 +48,8 @@ public class AulaoNmais1Application implements CommandLineRunner {
 		p4.getCategories().addAll(Arrays.asList(c1, c2));
 		p5.getCategories().addAll(Arrays.asList(c2, c3));
 		p6.getCategories().addAll(Arrays.asList(c1, c3));
-		p7.getCategories().addAll(Arrays.asList(c1));
-		p8.getCategories().addAll(Arrays.asList(c3));
+		p7.getCategories().add(c1);
+		p8.getCategories().add(c2);
 		p9.getCategories().addAll(Arrays.asList(c2, c3));
 		p10.getCategories().addAll(Arrays.asList(c1, c3));
 
