@@ -15,7 +15,7 @@
 	<groupId>io.github.marrafon91</groupId>
 	<artifactId>dscommerce</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>dscommerce</name>
+	<name>dscommerce-security</name>
 	<description>DSCommerce Estudos</description>
 
 	<properties>
