@@ -27,6 +27,15 @@ spring:
     activate:
       on-profile: test
 
+
+security:
+  client-id: ${SECURITY_CLIENT_ID}
+  client-secret: ${SECURITY_CLIENT_SECRET}
+  jwt:
+    duration: ${SECURITY_JWT_DURATION}
+    cors:
+      origins: ${CORS_ORIGINS}
+
   datasource:
     url: jdbc:h2:mem:testdb
     username: sa
