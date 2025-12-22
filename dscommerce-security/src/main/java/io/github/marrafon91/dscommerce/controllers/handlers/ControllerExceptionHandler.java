@@ -3,6 +3,7 @@ package io.github.marrafon91.dscommerce.controllers.handlers;
 import io.github.marrafon91.dscommerce.dto.CustomError;
 import io.github.marrafon91.dscommerce.dto.ValidationError;
 import io.github.marrafon91.dscommerce.services.excptions.DatabaseExecption;
+import io.github.marrafon91.dscommerce.services.excptions.ForbiddenException;
 import io.github.marrafon91.dscommerce.services.excptions.ResourceNotFoundExecption;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,13 @@ public class ControllerExceptionHandler {
        CustomError err = new CustomError(Instant.now(), status.value() , e.getMessage(), request.getRequestURI());
        return ResponseEntity.status(status).body(err);
    }
+
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<CustomError> forbidden(ForbiddenException e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.FORBIDDEN;
+        CustomError err = new CustomError(Instant.now(), status.value() , e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(status).body(err);
+    }
 
    @ExceptionHandler(DatabaseExecption.class)
    public ResponseEntity<CustomError> dataBase(DatabaseExecption e, HttpServletRequest request) {

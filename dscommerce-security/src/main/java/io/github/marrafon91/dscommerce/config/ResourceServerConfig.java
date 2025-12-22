@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -20,6 +21,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.time.Instant;
 import java.util.Arrays;
 
 @Configuration
@@ -35,7 +37,8 @@ public class ResourceServerConfig {
     @Order(1)
     public SecurityFilterChain h2SecurityFilterChain(HttpSecurity http) throws Exception {
 
-        http.securityMatcher(PathRequest.toH2Console()).csrf(AbstractHttpConfigurer::disable)
+        http.
+                securityMatcher(PathRequest.toH2Console()).csrf(AbstractHttpConfigurer::disable)
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));
         return http.build();
     }
@@ -45,7 +48,27 @@ public class ResourceServerConfig {
     public SecurityFilterChain rsSecurityFilterChain(HttpSecurity http) throws Exception {
 
         http.csrf(AbstractHttpConfigurer::disable);
-        http.authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll());
+        http.authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll())
+                .exceptionHandling(exception -> exception
+                        .accessDeniedHandler((request, response, ex) -> {
+
+                            response.setStatus(HttpStatus.FORBIDDEN.value());
+                            response.setContentType("application/json");
+
+                            String json = """
+                               {
+                                 "timestamp": "%s",
+                                 "status": 403,
+                                 "error": "Acesso negado: você não possui permissão para executar esta operação",
+                                 "path": "%s"
+                               }
+                               """.formatted(
+                                    Instant.now(),
+                                    request.getRequestURI()
+                            );
+
+                            response.getWriter().write(json);
+                        }));
         http.oauth2ResourceServer(oauth2ResourceServer -> oauth2ResourceServer.jwt(Customizer.withDefaults()));
         http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
         return http.build();
