@@ -1,6 +1,7 @@
 package io.github.marrafon91.dscommerce.services;
 
 import io.github.marrafon91.dscommerce.dto.ProductDTO;
+import io.github.marrafon91.dscommerce.dto.ProductMinDTO;
 import io.github.marrafon91.dscommerce.entities.Product;
 import io.github.marrafon91.dscommerce.repositories.ProductRepository;
 import io.github.marrafon91.dscommerce.services.excptions.DatabaseExecption;
@@ -28,9 +29,9 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public Page<ProductDTO> findAll(String name, Pageable pageable) {
+    public Page<ProductMinDTO> findAll(String name, Pageable pageable) {
         Page<Product> result = repository.searchByName(name, pageable);
-        return result.map(ProductDTO::new);
+        return result.map(ProductMinDTO::new);
     }
 
     @Transactional
