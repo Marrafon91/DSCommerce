@@ -1,7 +1,9 @@
 package io.github.marrafon91.dscommerce.services;
 
+import io.github.marrafon91.dscommerce.dto.CategoryDTO;
 import io.github.marrafon91.dscommerce.dto.ProductDTO;
 import io.github.marrafon91.dscommerce.dto.ProductMinDTO;
+import io.github.marrafon91.dscommerce.entities.Category;
 import io.github.marrafon91.dscommerce.entities.Product;
 import io.github.marrafon91.dscommerce.repositories.ProductRepository;
 import io.github.marrafon91.dscommerce.services.excptions.DatabaseExecption;
@@ -71,5 +73,12 @@ public class ProductService {
         entity.setDescription(dto.getDescription());
         entity.setPrice(dto.getPrice());
         entity.setImgUrl(dto.getImgUrl());
+
+        entity.getCategories().clear();
+        for (CategoryDTO catDTO : dto.getCategories()) {
+            Category cat = new Category();
+            cat.setId(catDTO.getId());
+            entity.getCategories().add(cat);
+        }
     }
 }

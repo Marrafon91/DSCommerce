@@ -1,10 +1,11 @@
 package io.github.marrafon91.dscommerce.dto;
 
+import io.github.marrafon91.dscommerce.entities.Category;
 import io.github.marrafon91.dscommerce.entities.Product;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProductDTO {
 
@@ -20,11 +21,13 @@ public class ProductDTO {
 
     @NotNull
     @Positive(message = "O preço deve ser positivo")
-
     private Double price;
 
     @NotBlank
     private String imgUrl;
+
+    @NotEmpty(message = "deve ter pelo menos uma categoria")
+    private List<CategoryDTO> categories = new ArrayList<>();
 
     public ProductDTO() {
     }
@@ -43,6 +46,9 @@ public class ProductDTO {
         description = entity.getDescription();
         price = entity.getPrice();
         imgUrl = entity.getImgUrl();
+        for (Category cat : entity.getCategories()) {
+            categories.add(new CategoryDTO(cat));
+        }
     }
 
     public Long getId() {
@@ -63,5 +69,9 @@ public class ProductDTO {
 
     public String getImgUrl() {
         return imgUrl;
+    }
+
+    public List<CategoryDTO> getCategories() {
+        return categories;
     }
 }
