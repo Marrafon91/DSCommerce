@@ -21,20 +21,11 @@ logging:
 
 ---
 
-# TEST (profile “test”)
+# TEST (profile "test")
 spring:
   config:
     activate:
       on-profile: test
-
-
-security:
-  client-id: ${SECURITY_CLIENT_ID}
-  client-secret: ${SECURITY_CLIENT_SECRET}
-  jwt:
-    duration: ${SECURITY_JWT_DURATION}
-    cors:
-      origins: ${CORS_ORIGINS}
 
   datasource:
     url: jdbc:h2:mem:testdb
@@ -47,9 +38,18 @@ security:
       enabled: true
 
   jpa:
+    open-in-view: false
     hibernate:
       ddl-auto: create-drop
     show-sql: true
     properties:
       hibernate:
         format_sql: true
+
+security:
+  client-id: ${SECURITY_CLIENT_ID}
+  client-secret: ${SECURITY_CLIENT_SECRET}
+  jwt:
+    duration: ${SECURITY_JWT_DURATION}
+    cors:
+      origins: ${CORS_ORIGINS}
