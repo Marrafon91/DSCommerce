@@ -1,7 +1,6 @@
 package io.github.marrafon91.dscommerce.controllers;
 
 import io.github.marrafon91.dscommerce.dto.OrderDTO;
-import io.github.marrafon91.dscommerce.dto.ProductDTO;
 import io.github.marrafon91.dscommerce.services.OrderService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
