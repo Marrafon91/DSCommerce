@@ -3,8 +3,6 @@ package com.devsuperior.dscommerce.tests;
 import com.devsuperior.dscommerce.entities.Category;
 import com.devsuperior.dscommerce.entities.Product;
 
-import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
-
 public class ProductFactory {
 
     public static Product createProduct() {
