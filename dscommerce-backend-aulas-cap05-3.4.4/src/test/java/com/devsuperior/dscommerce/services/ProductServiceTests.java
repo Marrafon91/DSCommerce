@@ -22,6 +22,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.util.List;
 import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.any;
+
 @ExtendWith(SpringExtension.class)
 public class ProductServiceTests {
 
@@ -34,6 +36,7 @@ public class ProductServiceTests {
     private long existingProductId, nonExistingProductId;
     private String productName;
     private Product product;
+    private ProductDTO productDTO;
 
     @BeforeEach
     public void setup() {
@@ -45,11 +48,15 @@ public class ProductServiceTests {
         product = ProductFactory.createProduct(productName);
         PageImpl<Product> page = new PageImpl<>(List.of(product));
 
+        productDTO = new ProductDTO(product);
+
 
         Mockito.when(repository.findById(existingProductId)).thenReturn(Optional.of(product));
         Mockito.when(repository.findById(nonExistingProductId)).thenReturn(Optional.empty());
 
-        Mockito.when(repository.searchByName(Mockito.any(), Mockito.any())).thenReturn(page);
+        Mockito.when(repository.searchByName(any(), any())).thenReturn(page);
+
+        Mockito.when(repository.save(any())).thenReturn(product);
     }
 
     @Test
@@ -78,5 +85,15 @@ public class ProductServiceTests {
         Assertions.assertFalse(result.isEmpty());
         Assertions.assertEquals(1, result.getTotalElements());
         Assertions.assertEquals(result.iterator().next().getName(), name);
+    }
+
+    @Test
+    public void insertShouldReturnProductDTO() {
+        ProductDTO result = service.insert(productDTO);
+
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(productDTO.getId(), result.getId());
+        Assertions.assertEquals(productDTO.getName(), result.getName());
+
     }
 }
