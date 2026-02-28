@@ -4,9 +4,13 @@ import com.devsuperior.dscommerce.dto.OrderDTO;
 import com.devsuperior.dscommerce.entities.Order;
 import com.devsuperior.dscommerce.entities.User;
 import com.devsuperior.dscommerce.repositories.OrderRepository;
+import com.devsuperior.dscommerce.services.exceptions.ForbiddenException;
+import com.devsuperior.dscommerce.services.exceptions.ResourceNotFoundException;
 import com.devsuperior.dscommerce.tests.OrderFactory;
 import com.devsuperior.dscommerce.tests.UserFactory;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -14,6 +18,8 @@ import org.mockito.Mockito;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Optional;
+
+import static org.mockito.ArgumentMatchers.any;
 
 @ExtendWith(SpringExtension.class)
 public class OrderServiceTests {
@@ -45,5 +51,44 @@ public class OrderServiceTests {
 
         Mockito.when(repository.findById(existingOrderId)).thenReturn(Optional.of(order));
         Mockito.when(repository.findById(nonExistingOrderId)).thenReturn(Optional.empty());
+    }
+
+    @Test
+    public void findByIdShouldReturnOrderDTOWhenIdExistsAndAdminLoggedIn() {
+        Mockito.doNothing().when(authService).validateSelfOrAdmin(any());
+
+        OrderDTO result = service.findById(existingOrderId);
+
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(existingOrderId, result.getId());
+        Assertions.assertNotNull(result.getClient());
+
+    }
+
+    @Test
+    public void findByIdShouldReturnOrderDTOWhenIdExistsAndSelfClientLoggedIn() {
+        Mockito.doNothing().when(authService).validateSelfOrAdmin(any());
+
+        OrderDTO result = service.findById(existingOrderId);
+
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(existingOrderId, result.getId());
+    }
+
+    @Test
+    public void findByIdShouldThrowsForbiddenExceptionWhenIdExistsAndOtherClientLoggedIn() {
+        Mockito.doThrow(ForbiddenException.class).when(authService).validateSelfOrAdmin(any());
+
+        Assertions.assertThrows(ForbiddenException.class,
+                () -> service.findById(existingOrderId));
+    }
+
+    @Test
+    public void findByIdShouldThrowsResourceNotFoundExceptionWhenIdDoesNotExists() {
+        Mockito.doNothing().when(authService).validateSelfOrAdmin(any());
+
+
+        Assertions.assertThrows(ResourceNotFoundException.class,
+                () -> service.findById(nonExistingOrderId));
     }
 }
