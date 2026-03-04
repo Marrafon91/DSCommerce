@@ -48,7 +48,7 @@ public class OrderService {
 	public OrderDTO insert(OrderDTO dto) {
 		
     	Order order = new Order();
-    	
+
     	order.setMoment(Instant.now());
     	order.setStatus(OrderStatus.WAITING_PAYMENT);
     	
@@ -61,7 +61,7 @@ public class OrderService {
     		order.getItems().add(item);
     	}
     	
-    	repository.save(order);
+    	order = repository.save(order);
     	orderItemRepository.saveAll(order.getItems());
     	
     	return new OrderDTO(order);
