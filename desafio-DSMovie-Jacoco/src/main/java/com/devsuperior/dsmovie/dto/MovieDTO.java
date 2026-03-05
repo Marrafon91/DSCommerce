@@ -32,6 +32,9 @@ public class MovieDTO {
 	@URL(message = "Field must be a valid url")
 	private String image;
 
+	public MovieDTO() {
+	}
+
 	public MovieDTO(Long id, String title, Double score, Integer count, String image) {
 		this.id = id;
 		this.title = title;
@@ -48,20 +51,40 @@ public class MovieDTO {
 		return id;
 	}
 
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public String getTitle() {
 		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	public Double getScore() {
 		return score;
 	}
-	
+
+	public void setScore(Double score) {
+		this.score = score;
+	}
+
 	public Integer getCount() {
 		return count;
 	}
 
+	public void setCount(Integer count) {
+		this.count = count;
+	}
+
 	public String getImage() {
 		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
 	}
 
 	@Override
