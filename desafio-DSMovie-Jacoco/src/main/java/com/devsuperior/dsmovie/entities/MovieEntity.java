@@ -97,4 +97,5 @@ public class MovieEntity {
 		MovieEntity other = (MovieEntity) obj;
 		return Objects.equals(id, other.id);
 	}
+
 }

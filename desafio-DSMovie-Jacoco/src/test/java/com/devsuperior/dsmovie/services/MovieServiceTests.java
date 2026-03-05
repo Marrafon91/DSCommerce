@@ -103,7 +103,7 @@ public class MovieServiceTests {
 		MovieDTO result = service.insert(movieDTO);
 
 		Assertions.assertNotNull(result);
-		Assertions.assertEquals(movieDTO.getId(), result.getId());
+		Assertions.assertEquals(movieDTO.getScore(), result.getScore());
 		Assertions.assertEquals(movieDTO.getTitle(), result.getTitle());
 	}
 	
@@ -112,8 +112,8 @@ public class MovieServiceTests {
 		MovieDTO result = service.update(existingMovieId, movieDTO);
 
 		Assertions.assertNotNull(result);
-		Assertions.assertEquals(movieDTO.getId(), result.getId());
 		Assertions.assertEquals(movieDTO.getTitle(), result.getTitle());
+		Assertions.assertEquals(movieDTO.getScore(), result.getScore());
 	}
 	
 	@Test

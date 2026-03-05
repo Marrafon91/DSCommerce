@@ -33,12 +33,20 @@ public class ScoreDTO {
 		this.movieId = score.getId().getMovie().getId();
 		this.score = Double.valueOf(df.format(score.getValue()));
 	}
-	
+
 	public Long getMovieId() {
 		return movieId;
 	}
 
+	public void setMovieId(Long movieId) {
+		this.movieId = movieId;
+	}
+
 	public Double getScore() {
 		return score;
+	}
+
+	public void setScore(Double score) {
+		this.score = score;
 	}
 }
