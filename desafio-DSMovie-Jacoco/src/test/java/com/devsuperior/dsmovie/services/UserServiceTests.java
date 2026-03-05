@@ -35,16 +35,14 @@ public class UserServiceTests {
     private CustomUserUtil userUtil;
 
     private String existingUsername, nonExistingUsername;
-    private UserEntity userEntity;
-    private List<UserDetailsProjection> userDetails;
 
     @BeforeEach
     void setUp() {
         existingUsername = "maria@gmail.com";
         nonExistingUsername = "user@gmail.com";
 
-        userEntity = UserFactory.createUserEntity();
-        userDetails = UserDetailsFactory.createCustomAdminUser(existingUsername);
+        UserEntity userEntity = UserFactory.createUserEntity();
+        List<UserDetailsProjection> userDetails = UserDetailsFactory.createCustomAdminUser(existingUsername);
 
         Mockito.when(userRepository.searchUserAndRolesByUsername(existingUsername)).thenReturn(userDetails);
         Mockito.when(userRepository.searchUserAndRolesByUsername(nonExistingUsername)).thenReturn(List.of());
