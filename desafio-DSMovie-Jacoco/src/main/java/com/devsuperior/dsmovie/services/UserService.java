@@ -37,17 +37,16 @@ public class UserService implements UserDetailsService {
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		
 		List<UserDetailsProjection> result = repository.searchUserAndRolesByUsername(username);
-		if (result.size() == 0) {
+		if (result.isEmpty()) {
 			throw new UsernameNotFoundException("Email not found");
 		}
 		
 		UserEntity user = new UserEntity();
-		user.setUsername(result.get(0).getUsername());
-		user.setPassword(result.get(0).getPassword());
+		user.setUsername(result.getFirst().getUsername());
+		user.setPassword(result.getFirst().getPassword());
 		for (UserDetailsProjection projection : result) {
 			user.addRole(new RoleEntity(projection.getRoleId(), projection.getAuthority()));
 		}
-		
 		return user;
 	}
 }

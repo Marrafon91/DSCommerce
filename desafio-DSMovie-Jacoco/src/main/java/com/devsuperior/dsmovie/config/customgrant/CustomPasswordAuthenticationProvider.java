@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -78,8 +79,11 @@ public class CustomPasswordAuthenticationProvider implements AuthenticationProvi
 		}
 		
 		authorizedScopes = user.getAuthorities().stream()
-				.map(scope -> scope.getAuthority())
-				.filter(scope -> registeredClient.getScopes().contains(scope))
+				.map(GrantedAuthority::getAuthority)
+				.filter(scope -> {
+                    assert registeredClient != null;
+                    return registeredClient.getScopes().contains(scope);
+                })
 				.collect(Collectors.toSet());
 		
 		//-----------Create a new Security Context Holder Context----------
