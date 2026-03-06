@@ -1,6 +1,7 @@
 package com.devsuperior.dscommerce.controllersIT;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -23,6 +24,7 @@ public class ProductControllerIT {
     private MockMvc mockMvc;
 
     private String productName;
+    private String adminToken;
 
     @BeforeEach
     void setup() {
@@ -55,5 +57,16 @@ public class ProductControllerIT {
         result.andExpect(jsonPath("$.content[0].name").value("Macbook Pro"));
         result.andExpect(jsonPath("$.content[0].price").value(1250.0));
         result.andExpect(jsonPath("$.content[0].imgUrl").value("https://raw.githubusercontent.com/devsuperior/dscatalog-resources/master/backend/img/3-big.jpg"));
+    }
+
+    @Test
+    void insertShouldReturnProductDTOCreatedWhenAdminLoggedIn() throws Exception {
+
+        String jsonBody = "{\"name\":\"Macbook Pro\",\"price\":90.5}";
+
+        ResultActions result = mockMvc.perform(post("/products")
+                .header("Authorization", "Bearer " + adminToken)
+                .content(jsonBody)
+                .accept(MediaType.APPLICATION_JSON));
     }
 }
