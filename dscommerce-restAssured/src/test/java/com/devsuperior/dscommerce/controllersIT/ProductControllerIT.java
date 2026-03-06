@@ -5,6 +5,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.devsuperior.dscommerce.dto.ProductDTO;
+import com.devsuperior.dscommerce.entities.Product;
+import com.devsuperior.dscommerce.tests.TokenUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +27,33 @@ public class ProductControllerIT {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private TokenUtil tokenUtil;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    private String clientUserName, clientPassword, adminUserName, adminPassword;
+    private String clientToken, adminToken, invalidToken;
     private String productName;
-    private String adminToken;
+
+    private Product product;
+    private ProductDTO productDTO;
 
     @BeforeEach
-    void setup() {
+    void setup() throws Exception {
+
+        clientUserName = "maria@gmail.com";
+        clientPassword = "123456";
+
+        adminUserName = "alex@gmail.com";
+        adminPassword = "123456";
+
         productName = "Macbook";
+
+        adminToken = tokenUtil.obtainAccessToken(mockMvc, adminUserName, adminPassword);
+        clientToken = tokenUtil.obtainAccessToken(mockMvc, clientUserName, clientPassword);
+        invalidToken = adminToken + "xpto"; // simulate wrong password
     }
 
     @Test
@@ -62,7 +87,7 @@ public class ProductControllerIT {
     @Test
     void insertShouldReturnProductDTOCreatedWhenAdminLoggedIn() throws Exception {
 
-        String jsonBody = "{\"name\":\"Macbook Pro\",\"price\":90.5}";
+        String jsonBody = objectMapper.writeValueAsString(productDTO);
 
         ResultActions result = mockMvc.perform(post("/products")
                 .header("Authorization", "Bearer " + adminToken)
