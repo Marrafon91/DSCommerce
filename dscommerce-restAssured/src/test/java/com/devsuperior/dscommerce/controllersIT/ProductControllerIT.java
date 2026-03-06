@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.devsuperior.dscommerce.dto.ProductDTO;
+import com.devsuperior.dscommerce.entities.Category;
 import com.devsuperior.dscommerce.entities.Product;
 import com.devsuperior.dscommerce.tests.TokenUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
@@ -54,6 +56,11 @@ public class ProductControllerIT {
         adminToken = tokenUtil.obtainAccessToken(mockMvc, adminUserName, adminPassword);
         clientToken = tokenUtil.obtainAccessToken(mockMvc, clientUserName, clientPassword);
         invalidToken = adminToken + "xpto"; // simulate wrong password
+
+        Category category = new Category(2L, "Electronics");
+        product = new Product(null, "Console PlayStation 5", "Um otimo console", 3999.90, "https://raw.githubusercontent.com/devsuperior/dscatalog-resources/master/backend/img/1-big.jpg");
+        product.getCategories().add(category);
+        productDTO = new ProductDTO(product);
     }
 
     @Test
@@ -90,8 +97,18 @@ public class ProductControllerIT {
         String jsonBody = objectMapper.writeValueAsString(productDTO);
 
         ResultActions result = mockMvc.perform(post("/products")
-                .header("Authorization", "Bearer " + adminToken)
-                .content(jsonBody)
-                .accept(MediaType.APPLICATION_JSON));
+                        .header("Authorization", "Bearer " + adminToken)
+                        .content(jsonBody)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(MockMvcResultHandlers.print());
+
+        result.andExpect(status().isCreated());
+        result.andExpect(jsonPath("$.id").value(26L));
+        result.andExpect(jsonPath("$.name").value("Console PlayStation 5"));
+        result.andExpect(jsonPath("$.description").value("Um otimo console"));
+        result.andExpect(jsonPath("$.price").value(3999.90));
+        result.andExpect(jsonPath("$.imgUrl").value("https://raw.githubusercontent.com/devsuperior/dscatalog-resources/master/backend/img/1-big.jpg"));
+        result.andExpect(jsonPath("$.categories[0].id").value(2L));
     }
 }
