@@ -1,7 +1,6 @@
 package com.devsuperior.dscommerce.controllersIT;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -19,6 +18,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
@@ -38,6 +38,7 @@ public class ProductControllerIT {
     private String clientUserName, clientPassword, adminUserName, adminPassword;
     private String clientToken, adminToken, invalidToken;
     private String productName;
+    private Long existingProductId, nonExistingProductId, dependentProductId;
 
     private Product product;
     private ProductDTO productDTO;
@@ -53,6 +54,10 @@ public class ProductControllerIT {
 
         productName = "Macbook";
 
+        existingProductId = 2L;
+        nonExistingProductId = 999L;
+        dependentProductId = 3L;
+
         adminToken = tokenUtil.obtainAccessToken(mockMvc, adminUserName, adminPassword);
         clientToken = tokenUtil.obtainAccessToken(mockMvc, clientUserName, clientPassword);
         invalidToken = adminToken + "xpto"; // simulate wrong password
@@ -61,6 +66,7 @@ public class ProductControllerIT {
         product = new Product(null, "Console PlayStation 5", "Um otimo console", 3999.90, "https://raw.githubusercontent.com/devsuperior/dscatalog-resources/master/backend/img/1-big.jpg");
         product.getCategories().add(category);
         productDTO = new ProductDTO(product);
+
     }
 
     @Test
@@ -210,7 +216,6 @@ public class ProductControllerIT {
         result.andExpect(status().isForbidden());
     }
 
-
     @Test
     void insertShouldReturnUnauthorizedWhenInvalidToken() throws Exception {
         String jsonBody = objectMapper.writeValueAsString(productDTO);
@@ -223,6 +228,56 @@ public class ProductControllerIT {
 
         result.andExpect(status().isUnauthorized());
     }
-    
+
+    @Test
+    void deleteShouldReturnNoContentWhenIdExistsAdminLoggedIn() throws Exception {
+
+        ResultActions result = mockMvc.perform(delete("/products/{id}", existingProductId)
+                .header("Authorization", "Bearer " + adminToken)
+                .accept(MediaType.APPLICATION_JSON));
+
+        result.andExpect(status().isNoContent());
+    }
+
+    @Test
+    void deleteShouldReturnNotFoundWhenIdDoesNotExistsAndAdminLoggedIn() throws Exception {
+
+        ResultActions result = mockMvc.perform(delete("/products/{id}", nonExistingProductId)
+                .header("Authorization", "Bearer " + adminToken)
+                .accept(MediaType.APPLICATION_JSON));
+
+        result.andExpect(status().isNotFound());
+    }
+
+    @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
+    void deleteShouldReturnBadRequestWhenDependentIdAndAdminLoggedIn() throws Exception {
+
+        ResultActions result = mockMvc.perform(delete("/products/{id}", dependentProductId)
+                .header("Authorization", "Bearer " + adminToken)
+                .accept(MediaType.APPLICATION_JSON));
+
+        result.andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void deleteShouldReturnUnauthorizedWhenInvalidToken() throws Exception {
+
+        ResultActions result = mockMvc.perform(delete("/products/{id}", existingProductId)
+                .header("Authorization", "Bearer " + invalidToken)
+                .accept(MediaType.APPLICATION_JSON));
+
+        result.andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void deleteShouldReturnForbiddenWhenClientLoggedIn() throws Exception {
+
+        ResultActions result = mockMvc.perform(delete("/products/{id}", existingProductId)
+                .header("Authorization", "Bearer " + clientToken)
+                .accept(MediaType.APPLICATION_JSON));
+
+        result.andExpect(status().isForbidden());
+    }
 }
 
