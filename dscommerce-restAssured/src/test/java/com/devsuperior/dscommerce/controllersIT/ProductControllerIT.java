@@ -121,10 +121,10 @@ public class ProductControllerIT {
         String jsonBody = objectMapper.writeValueAsString(productDTO);
 
         ResultActions result = mockMvc.perform(post("/products")
-                        .header("Authorization", "Bearer " + adminToken)
-                        .content(jsonBody)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON));
+                .header("Authorization", "Bearer " + adminToken)
+                .content(jsonBody)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON));
 
         result.andExpect(status().isUnprocessableEntity());
     }
@@ -138,10 +138,10 @@ public class ProductControllerIT {
         String jsonBody = objectMapper.writeValueAsString(productDTO);
 
         ResultActions result = mockMvc.perform(post("/products")
-                        .header("Authorization", "Bearer " + adminToken)
-                        .content(jsonBody)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON));
+                .header("Authorization", "Bearer " + adminToken)
+                .content(jsonBody)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON));
 
         result.andExpect(status().isUnprocessableEntity());
     }
@@ -155,10 +155,10 @@ public class ProductControllerIT {
         String jsonBody = objectMapper.writeValueAsString(productDTO);
 
         ResultActions result = mockMvc.perform(post("/products")
-                        .header("Authorization", "Bearer " + adminToken)
-                        .content(jsonBody)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON));
+                .header("Authorization", "Bearer " + adminToken)
+                .content(jsonBody)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON));
 
         result.andExpect(status().isUnprocessableEntity());
     }
@@ -172,10 +172,10 @@ public class ProductControllerIT {
         String jsonBody = objectMapper.writeValueAsString(productDTO);
 
         ResultActions result = mockMvc.perform(post("/products")
-                        .header("Authorization", "Bearer " + adminToken)
-                        .content(jsonBody)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON));
+                .header("Authorization", "Bearer " + adminToken)
+                .content(jsonBody)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON));
 
         result.andExpect(status().isUnprocessableEntity());
     }
@@ -189,11 +189,40 @@ public class ProductControllerIT {
         String jsonBody = objectMapper.writeValueAsString(productDTO);
 
         ResultActions result = mockMvc.perform(post("/products")
-                        .header("Authorization", "Bearer " + adminToken)
-                        .content(jsonBody)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON));
+                .header("Authorization", "Bearer " + adminToken)
+                .content(jsonBody)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON));
 
         result.andExpect(status().isUnprocessableEntity());
     }
+
+    @Test
+    void insertShouldReturnForbiddenWhenClientLoggedIn() throws Exception {
+        String jsonBody = objectMapper.writeValueAsString(productDTO);
+
+        ResultActions result = mockMvc.perform(post("/products")
+                .header("Authorization", "Bearer " + clientToken)
+                .content(jsonBody)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON));
+
+        result.andExpect(status().isForbidden());
+    }
+
+
+    @Test
+    void insertShouldReturnUnauthorizedWhenInvalidToken() throws Exception {
+        String jsonBody = objectMapper.writeValueAsString(productDTO);
+
+        ResultActions result = mockMvc.perform(post("/products")
+                .header("Authorization", "Bearer " + invalidToken)
+                .content(jsonBody)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON));
+
+        result.andExpect(status().isUnauthorized());
+    }
+    
 }
+
