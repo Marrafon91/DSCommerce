@@ -206,7 +206,7 @@ public class ProductControllerTests {
 	}
 	
 	@Test
-	public void updateShouldReturnProductDTOWhenIdExistAandAdminLogged() throws Exception {
+	public void updateShouldReturnProductDTOWhenIdExistAndAdminLogged() throws Exception {
 		
 		String jsonBody = objectMapper.writeValueAsString(productDTO);
 		
